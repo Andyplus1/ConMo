@@ -44,7 +44,7 @@ pip install -r requirements.txt
 <!-- * Our method is designed for transferring motion across objects and scenes -->
 * Our method is based on [ZeroScope](https://huggingface.co/cerspense/zeroscope_v2_576w) text-to-video model and [DMT](https://github.com/diffusion-motion-transfer/diffusion-motion-transfer) motion transfer method. Therefore, we can edit videos of **24 frames**.
 * In some cases, the combination of the target object and the motion from the input video may be out of the T2V model's distribution, potentially resulting in visual artifacts in the generated video. It might be necessary to try several different seeds for sampling.
-* Method was tested to run on a single NVIDIA A40 48GB, and takes ~32GB of video memory.
+* Method was tested to run on a single NVIDIA A100 40GB, and takes ~32GB of video memory.
  It takes approximately 5 minutes on a single NVIDIA A100 40GB for inference.
 
 # Preprocess
