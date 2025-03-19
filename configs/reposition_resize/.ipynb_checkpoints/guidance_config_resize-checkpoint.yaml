@@ -1,0 +1,47 @@
+device: 'cuda'
+seed: null
+output_path: 'results_new/walk_dog_origin'
+data_path: 'data/frames/walk_dog'
+mask_path: ['/root/autodl-tmp/rebuttal/DMT-to-MTASAP/data/masks/man_masks','/root/autodl-tmp/rebuttal/DMT-to-MTASAP/data/masks/dog_masks']
+# mask_path: ['/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_1_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_2_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_3_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_5_masks']
+latents_path: 'data/frames/walk_dog/ddim_latents'
+source_prompt: "Amazing quality, masterpiece, A person is walking a dog."
+target_prompt: "Amazing quality, masterpiece, A person is walking a tiger."
+negative_prompt: "bad quality, distortions, unrealistic, distorted image, watermark, signature"
+guidance_scale: 10
+
+with_lr_decay: True
+optim_lr: 0.01
+scale_range: [0.007 , 0.004]
+optimization_steps: 10
+
+
+max_frames: 24
+n_timesteps: 50
+max_guidance_timestep: 1
+min_guidance_timestep: 0.6
+features_loss_weight: 0
+global_averaging: True
+features_diff_loss_weight: 1
+
+restart_sampling: True
+random_init: False
+high_freq_replacement_init: True
+downsample_factor: 4
+
+use_upsampler_features: True
+use_temporal_attention_features: True
+use_spatial_attention_features: True
+use_conv_features: True
+use_temp_conv_features: True
+up_res_dict: {1: [1]}
+guidance_before_res: True
+
+interfere_mask: True
+bbox_mask: False
+resize: True
+w_rescale: [1,1.2]
+h_rescale: [1,1.2]
+reposition: False
+w_ratio: [0,0] # 负左正右
+h_ratio: [0,0] # 负上正下

@@ -1,0 +1,44 @@
+device: 'cuda'
+seed: null
+output_path: 'results_ablation/carturn_random_init_erase_outerspace'
+data_path: 'data/frames/car_turn'
+mask_path: ["/root/autodl-tmp/DMT-to-MTASAP_4ablation/data/masks/car_turn/obj_1_masks"]
+# mask_path: ['/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_1_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_2_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_3_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_5_masks']
+latents_path:  'data/frames/car_turn/ddim_latents'
+source_prompt: "Amazing quality, masterpiece, A car is turning on the road."
+target_prompt: "Amazing quality, masterpiece, outer space with stars."
+negative_prompt: "bad quality, distortions, unrealistic, distorted image, watermark, signature"
+guidance_scale: 10
+
+with_lr_decay: True
+optim_lr: 0.01
+scale_range: [0.007 , 0.004]
+optimization_steps: 10
+
+
+max_frames: 24
+n_timesteps: 50
+max_guidance_timestep: 1
+min_guidance_timestep: 0.6
+features_loss_weight: 0
+global_averaging: True
+features_diff_loss_weight: 1
+
+restart_sampling: True
+random_init: True
+high_freq_replacement_init: True
+downsample_factor: 4
+
+use_upsampler_features: True
+use_temporal_attention_features: True
+use_spatial_attention_features: True
+use_conv_features: True
+use_temp_conv_features: True
+up_res_dict: {1: [1]}
+guidance_before_res: True
+
+interfere_mask: False
+bbox_mask: False
+w_rescale: 1
+h_rescale: 1
+cm_weight: [1]
