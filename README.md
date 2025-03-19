@@ -3,7 +3,7 @@
 <a href="https://arxiv.org/abs/"><img src="https://img.shields.io/badge/arXiv-2311.17009-b31b1b.svg"></a> -->
 
 This is the official implementation of the paper:
-
+ConMo: Controllable Motion Disentanglement and Recomposition for Zero-Shot Motion Transfer
 <!-- [**Space-Time Diffusion Features for Zero-Shot Text-Driven Motion Transfer**](https://diffusion-motion-transfer.github.io/)
 <br/>
 
