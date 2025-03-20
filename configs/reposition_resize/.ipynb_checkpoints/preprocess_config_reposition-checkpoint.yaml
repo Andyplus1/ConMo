@@ -1,8 +1,8 @@
-video_path: /root/autodl-tmp/rebuttal/DMT-to-MTASAP/data_vis/car_race2
-save_dir: /root/autodl-tmp/rebuttal/DMT-to-MTASAP/data_vis/car_race2/ddim_latents
+video_path: data/frames/van
+save_dir: data/frames/van/ddim_latents
 max_number_of_frames: 24
 
 n_timesteps: 999
-prompt: Amazing quality, masterpiece, two racing cars are competing in a race.
+prompt: Amazing quality, masterpiece, a van is moving one the road.
 negative_prompt: ""
 save_ddim_reconstruction: True

@@ -124,8 +124,8 @@ For selective transferring motions from the original video / transferring only t
 #  For selective transferring 
 python preprocess_video_ddim.py --config_path configs/erase_camera/preprocess_config_erase.yaml
 python run_erase.py --config_path configs/erase_camera/guidance_config_erase.yaml
-#  For transferring camera motion only.
 
+#  For transferring camera motion only.
 python preprocess_video_ddim.py --config_path configs/erase_camera/preprocess_config_camera.yaml
 python run_erase.py --config_path configs/erase_camera/guidance_config_camera.yaml
 ```
@@ -135,7 +135,7 @@ Once the method is done, the video will be saved to the ```output_path``` under 
 
 # Tips
 * To get better samples from the T2V model, we used the prefix text ```"Amazing quality, masterpiece, "``` for inversion and edits.
-* If the video contains more complex motion/small objects, try increasing number of optimization steps - ```optimization_step: 30```.
+* If the video contains more complex motion/small objects, try increasing number of optimization steps - ```optimization_step: 30```. But it may affect the alignment with the text.
 * For large deviation in structure between the source and target objects, try using a lower lr - ```scale_range:[0.005, 0.002]```,
 *  or adding the source object to the negative prompt text.
 

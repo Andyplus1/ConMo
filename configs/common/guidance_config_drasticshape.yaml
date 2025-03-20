@@ -2,7 +2,7 @@ device: 'cuda'
 seed: null
 output_path: 'results/car_turn'
 data_path: 'data/frames/car_turn'
-mask_path: ["data/masks/car_turn"]
+mask_path: ["data/masks/car_turn/obj_1_masks"]
 latents_path: 'data/frames/car_turn/ddim_latents'
 source_prompt: "Amazing quality, masterpiece, A car is turning on the road."
 target_prompt: "Amazing quality, masterpiece, A motorbike is turning on the road."
