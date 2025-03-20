@@ -196,35 +196,15 @@ def calculate_losses(orig_features, target_features, masks,config):
     if config["features_diff_loss_weight"] > 0: #True
         
         features_diff_loss = 0
-        
-        # orig = orig[:,:,:5,:]
-        # target = torch.cat((target[:,:,6:,:],target[:,:,:7,:]),dim=2)
-
-        # change begin
-        
-        # orig1 = orig[:,:,:4,:]
-        # orig2 = orig[:,:,4:,:]
-        
-        # bool_masks = masks>0.5
-        
         compressed_tensor = F.interpolate(masks.float().squeeze(2), size=orig.shape[-2:], mode='bilinear')
         mask_bool = compressed_tensor > 0.5
-        # if mask_bool.shape[1] == 4:
-        #     mask_bool = mask_bool.all(dim=1) 
-        #     mask_bool = mask_bool.unsqueeze(1)
-        # from IPython import embed;embed()
         mask_bool_4gen =  mask_bool
-        # mask_bool_4gen = expand_true_regions(mask_bool,config.h_rescale,config.w_rescale)
         mask_other = mask_bool.transpose(0,1)
         mask_other_list = []
         for i in range(mask_bool.shape[0]):
             mask_other_this = torch.cat((mask_other[:,:i],mask_other[:,i+1:]),dim=1)
             mask_other_this = mask_other_this.any(dim=1)
             mask_other_list.append(mask_other_this)
-            # print("test1")
-            # from IPython import embed;embed()
-        # print("test1")
-        # from IPython import embed;embed()
         mask_other = torch.stack(mask_other_list)
          
         # mask有黑的时考虑下怎么处理
@@ -234,12 +214,6 @@ def calculate_losses(orig_features, target_features, masks,config):
             for j in range(mask_bool.shape[0]):
                 mask_anchor1 = mask_bool[j][i]  #torch.Size([2, 24, 10, 18])
                 mask_anchor1_4gen = mask_bool_4gen[j][i]
-                # mask_other_anchor = mask_other[j]
-                # mask_other_anchor = torch.cat((mask_other[:,:j],mask_other[:,j+1:]),dim=1)
-                # mask_other_anchor = mask_other_anchor.any(dim=1)
-
-                # print("test1")
-                # from IPython import embed;embed()
 
 
                 if config["bbox_mask"]:
@@ -305,33 +279,26 @@ def calculate_losses(orig_features, target_features, masks,config):
                  
                 orig_anchor1 = orig[i].squeeze(0).repeat(mask_bool.shape[1],1,1,1)
                 target_anchor1 = target[i].squeeze(0).repeat(mask_bool.shape[1],1,1,1)
-                # print("test2")
-                # from IPython import embed;embed() 
-                # orig_masked = (new_mean(orig, mask_target.unsqueeze(1))+config["cm_weight"][j]*orig_unmasked)/(1+config["cm_weight"][j])
-                # orig_anchor1_masked = (new_mean(orig_anchor1, mask_target.unsqueeze(1))+config["cm_weight"][j]*orig_anchor1_unmasked)/(1+config["cm_weight"][j])
                 orig_masked = new_mean(orig, mask_target.unsqueeze(1))
                 orig_anchor1_masked = new_mean(orig_anchor1, mask_target.unsqueeze(1))
                 orig_diffs_masked = orig_masked - orig_anchor1_masked
                 target_masked = new_mean(target, mask_target_4gen.unsqueeze(1))
                 target_anchor1_masked = new_mean(target_anchor1, mask_target_4gen.unsqueeze(1))
                 target_diffs_masked = target_masked - target_anchor1_masked
-                # if j!=1:
-                #     features_diff_loss += 1 - F.cosine_similarity(target_diffs_masked, orig_diffs_masked, dim=1).mean()
-                # else:
-                #     features_diff_loss += 1 - F.cosine_similarity(target_diffs_masked, orig_diffs_unmasked, dim=1).mean()
-                features_diff_loss += 1 - F.cosine_similarity(target_diffs_masked, orig_diffs_unmasked, dim=1).mean()
+                # print("test2")
+                # from IPython import embed;embed()
+                if config['erased'][j]:
+                    features_diff_loss += 1 - F.cosine_similarity(target_diffs_masked, orig_diffs_unmasked, dim=1).mean()
+                else:
+                    features_diff_loss += 1 - F.cosine_similarity(target_diffs_masked, orig_diffs_masked, dim=1).mean()
            
-
-
         features_diff_loss /= (len(orig)*(1+mask_bool.shape[0]))
-              
-
+        
         total_loss += config["features_diff_loss_weight"] * features_diff_loss
         losses["features_diff_loss"] = features_diff_loss
 
         # change end
-        # print("test2")
-        # from IPython import embed;embed()
+        
 
     losses["total_loss"] = total_loss
     return losses

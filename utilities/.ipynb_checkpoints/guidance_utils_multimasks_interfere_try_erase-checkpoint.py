@@ -48,6 +48,36 @@ def mask_or(mask_anchor,mask_all):
 
     return mask_all | mask_anchor
 
+def mask_or_interfere(mask_anchor,mask_all,i,j,mask_other):
+    
+    # mask_anchor_trangle = mask_tobboxmask(mask_anchor)
+    # mask_all_trangle = []
+    mask_final = []
+    mask_other_current = mask_other[j][i]
+
+    for idx in range(mask_all.shape[0]):
+        mask_other_this = mask_other[j][idx]
+        mask_all_this = mask_all[idx]
+        mask_part1 = mask_anchor^(mask_anchor&mask_other_this)
+        mask_part2 = mask_all_this^(mask_all_this&mask_other_current)
+        mask_final.append(mask_part1|mask_part2)
+        # mask_final.append((mask_anchor&mask_other_this)|(mask_all_this&mask_other_current))
+    
+    mask_final = torch.stack(mask_final)
+    return mask_final
+
+
+    # for idx in range(mask_all.shape[0]):
+    #     mask_this = mask_all[idx]
+    #     mask_this_trangle = mask_tobboxmask(mask_this)
+    #     mask_all_trangle.append(mask_this_trangle)
+    # mask_all_trangle = torch.stack(mask_all_trangle)
+    # 可视化mask_anchor_trangle
+    # bool2img(mask_anchor_trangle)
+   
+
+    # return mask_all | mask_anchor
+
 def mask_or_bbox(mask_anchor,mask_all):
     
     mask_anchor_trangle = mask_tobboxmask(mask_anchor)
@@ -64,11 +94,12 @@ def mask_or_bbox(mask_anchor,mask_all):
     return mask_all_trangle | mask_anchor_trangle
 
 def new_mean(tensor,mask):
-    expanded_mask = mask.expand(-1, 1280, -1, -1)
+    f,c,h,w = tensor.shape
+    expanded_mask = mask.expand(-1, c, -1, -1)
     selected_values = tensor*expanded_mask
     
     sum_values = selected_values.sum(dim=(2,3))
-    true_counts = expanded_mask.view(24, 1280, -1).sum(dim=2) 
+    true_counts = expanded_mask.view(f, c, -1).sum(dim=2) 
     
     mean_values = sum_values / true_counts
     mean_values = mean_values.unsqueeze(-1).unsqueeze(-1)
@@ -118,10 +149,14 @@ def expand_true_regions(matrix,h_raitio,w_ratio):
 
     for j in range(matrix.shape[0]):
         for i in range(matrix.shape[1]):
-            # print("test_")
+            
             # from IPython import embed;embed()
             matrix_this = matrix[j][i]
             true_indices_this = torch.nonzero(matrix_this)
+            # print("test_"+str(i)+'_'+str(j))
+            # print(true_indices_this)
+            if len(true_indices_this) == 0:
+                continue
             h_min = true_indices_this[:,0].min()
             h_max = true_indices_this[:,0].max()
             w_min = true_indices_this[:,1].min()
@@ -161,58 +196,47 @@ def calculate_losses(orig_features, target_features, masks,config):
     if config["features_diff_loss_weight"] > 0: #True
         
         features_diff_loss = 0
-        
-        # orig = orig[:,:,:5,:]
-        # target = torch.cat((target[:,:,6:,:],target[:,:,:7,:]),dim=2)
-
-        # change begin
-        
-        # orig1 = orig[:,:,:4,:]
-        # orig2 = orig[:,:,4:,:]
-        
-        # bool_masks = masks>0.5
-        
         compressed_tensor = F.interpolate(masks.float().squeeze(2), size=orig.shape[-2:], mode='bilinear')
         mask_bool = compressed_tensor > 0.5
-        # if mask_bool.shape[1] == 4:
-        #     mask_bool = mask_bool.all(dim=1) 
-        #     mask_bool = mask_bool.unsqueeze(1)
-        
-        mask_bool_4gen = expand_true_regions(mask_bool,config.h_rescale,config.w_rescale)
-        
+        mask_bool_4gen =  mask_bool
+        mask_other = mask_bool.transpose(0,1)
+        mask_other_list = []
+        for i in range(mask_bool.shape[0]):
+            mask_other_this = torch.cat((mask_other[:,:i],mask_other[:,i+1:]),dim=1)
+            mask_other_this = mask_other_this.any(dim=1)
+            mask_other_list.append(mask_other_this)
+        mask_other = torch.stack(mask_other_list)
          
-        
+        # mask有黑的时考虑下怎么处理
         for i in range(mask_bool.shape[1]):
             mask_target_all = torch.zeros_like(mask_bool[0])
             mask_target_all_4gen= torch.zeros_like(mask_bool[0])
             for j in range(mask_bool.shape[0]):
-                
                 mask_anchor1 = mask_bool[j][i]  #torch.Size([2, 24, 10, 18])
                 mask_anchor1_4gen = mask_bool_4gen[j][i]
-                # print("test1")
-                # from IPython import embed;embed()
+
 
                 if config["bbox_mask"]:
                     mask_target = mask_or_bbox(mask_anchor1,mask_bool[j])
                     mask_target_4gen = mask_or_bbox(mask_anchor1_4gen,mask_bool_4gen[j])
+                    mask_target_all = mask_target_all | mask_target
+                    mask_target_all_4gen = mask_target_all_4gen | mask_target_4gen
+                elif config["interfere_mask"]:
+                    mask_target = mask_or_interfere(mask_anchor1,mask_bool[j],i,j,mask_other)
+                    mask_target_4gen = mask_or_interfere(mask_anchor1_4gen,mask_bool_4gen[j],i,j,mask_other)
+                    mask_target_bask = mask_or(mask_anchor1,mask_bool[j])
+                    mask_target_4gen_bask = mask_or(mask_anchor1_4gen,mask_bool_4gen[j])
+                    mask_target_all = mask_target_all | mask_target_bask
+                    mask_target_all_4gen = mask_target_all_4gen | mask_target_4gen_bask
                 else:
                     mask_target = mask_or(mask_anchor1,mask_bool[j])
                     mask_target_4gen = mask_or(mask_anchor1_4gen,mask_bool_4gen[j])
-                mask_target_all = mask_target_all | mask_target
-                mask_target_all_4gen = mask_target_all_4gen | mask_target_4gen
-                # print("test2")
-                # from IPython import embed;embed()  
-                orig_anchor1 = orig[i].squeeze(0).repeat(24,1,1,1)
-                target_anchor1 = target[i].squeeze(0).repeat(24,1,1,1)
+                    mask_target_all = mask_target_all | mask_target
+                    mask_target_all_4gen = mask_target_all_4gen | mask_target_4gen
 
-                orig_masked = new_mean(orig, mask_target.unsqueeze(1))
-                orig_anchor1_masked = new_mean(orig_anchor1, mask_target.unsqueeze(1))
-                orig_diffs_masked = orig_masked - orig_anchor1_masked
-                target_masked = new_mean(target, mask_target_4gen.unsqueeze(1))
-                target_anchor1_masked = new_mean(target_anchor1, mask_target_4gen.unsqueeze(1))
-                target_diffs_masked = target_masked - target_anchor1_masked
-                features_diff_loss += 1 - F.cosine_similarity(target_diffs_masked, orig_diffs_masked, dim=1).mean()
-                
+            orig_anchor1 = orig[i].squeeze(0).repeat(mask_bool.shape[1],1,1,1)
+            target_anchor1 = target[i].squeeze(0).repeat(mask_bool.shape[1],1,1,1)
+            
             orig_unmasked = new_mean(orig, ~mask_target_all.unsqueeze(1))
             orig_anchor1_unmasked = new_mean(orig_anchor1, ~mask_target_all.unsqueeze(1))
             orig_diffs_unmasked = orig_unmasked - orig_anchor1_unmasked
@@ -220,18 +244,61 @@ def calculate_losses(orig_features, target_features, masks,config):
             target_anchor1_unmasked = new_mean(target_anchor1, ~mask_target_all_4gen.unsqueeze(1))
             target_diffs_unmasked = target_unmasked - target_anchor1_unmasked
             features_diff_loss += 1 - F.cosine_similarity(target_diffs_unmasked, orig_diffs_unmasked, dim=1).mean()
-            # expand_true_regions(mask_bool,1,1)
+            
+            
+
+            for j in range(mask_bool.shape[0]):
+                
+                mask_anchor1 = mask_bool[j][i]  #torch.Size([2, 24, 10, 18])
+                mask_anchor1_4gen = mask_bool_4gen[j][i]
+                # mask_other_anchor = mask_other[j]
+                # mask_other_anchor = torch.cat((mask_other[:,:j],mask_other[:,j+1:]),dim=1)
+                # mask_other_anchor = mask_other_anchor.any(dim=1)
+
+                # print("test1")
+                # from IPython import embed;embed()
 
 
+                if config["bbox_mask"]:
+                    mask_target = mask_or_bbox(mask_anchor1,mask_bool[j])
+                    mask_target_4gen = mask_or_bbox(mask_anchor1_4gen,mask_bool_4gen[j])
+                    mask_target_all = mask_target_all | mask_target
+                    mask_target_all_4gen = mask_target_all_4gen | mask_target_4gen
+                elif config["interfere_mask"]:
+                    mask_target = mask_or_interfere(mask_anchor1,mask_bool[j],i,j,mask_other)
+                    mask_target_4gen = mask_or_interfere(mask_anchor1_4gen,mask_bool_4gen[j],i,j,mask_other)
+                    mask_target_bask = mask_or(mask_anchor1,mask_bool[j])
+                    mask_target_4gen_bask = mask_or(mask_anchor1_4gen,mask_bool_4gen[j])
+                    mask_target_all = mask_target_all | mask_target_bask
+                    mask_target_all_4gen = mask_target_all_4gen | mask_target_4gen_bask
+                else:
+                    mask_target = mask_or(mask_anchor1,mask_bool[j])
+                    mask_target_4gen = mask_or(mask_anchor1_4gen,mask_bool_4gen[j])
+                    mask_target_all = mask_target_all | mask_target
+                    mask_target_all_4gen = mask_target_all_4gen | mask_target_4gen
+                 
+                orig_anchor1 = orig[i].squeeze(0).repeat(mask_bool.shape[1],1,1,1)
+                target_anchor1 = target[i].squeeze(0).repeat(mask_bool.shape[1],1,1,1)
+                orig_masked = new_mean(orig, mask_target.unsqueeze(1))
+                orig_anchor1_masked = new_mean(orig_anchor1, mask_target.unsqueeze(1))
+                orig_diffs_masked = orig_masked - orig_anchor1_masked
+                target_masked = new_mean(target, mask_target_4gen.unsqueeze(1))
+                target_anchor1_masked = new_mean(target_anchor1, mask_target_4gen.unsqueeze(1))
+                target_diffs_masked = target_masked - target_anchor1_masked
+                # print("test2")
+                # from IPython import embed;embed()
+                if config['erased'][j]:
+                    features_diff_loss += 1 - F.cosine_similarity(target_diffs_masked, orig_diffs_unmasked, dim=1).mean()
+                else:
+                    features_diff_loss += 1 - F.cosine_similarity(target_diffs_masked, orig_diffs_masked, dim=1).mean()
+           
         features_diff_loss /= (len(orig)*(1+mask_bool.shape[0]))
-              
-
+        
         total_loss += config["features_diff_loss_weight"] * features_diff_loss
         losses["features_diff_loss"] = features_diff_loss
 
         # change end
-        # print("test2")
-        # from IPython import embed;embed()
+        
 
     losses["total_loss"] = total_loss
     return losses
