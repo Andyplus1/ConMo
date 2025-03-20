@@ -45,7 +45,7 @@ pip install -r requirements.txt
 ```
 
 # Download Sample Data
-The sample data is provided in [this link](https://pan.baidu.com/s/1E0EDFmW5XHFDjQdaGenQqQ) (BaiduYun Extraction Code:frik)
+The sample data is provided in [this link](https://pan.baidu.com/s/1W5Sap5V_Xw_BXnftTDfd5A) (BaiduYun Extraction Code: uyi4 )
 
 # Motion Transfer
 <!-- * Our method is designed for transferring motion across objects and scenes -->
