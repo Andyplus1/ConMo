@@ -63,7 +63,7 @@ class Guidance(nn.Module):
         self.config = config
         self.device = config["device"]
 
-        model_key = "/root/autodl-tmp/zeroscope_v2_576w"
+        model_key = "cerspense/zeroscope_v2_576w"
         self.resolution = (576, 320)
 
         print("Loading video model")

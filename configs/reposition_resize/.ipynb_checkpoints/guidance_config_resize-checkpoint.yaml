@@ -1,11 +1,11 @@
 device: 'cuda'
 seed: null
-output_path: 'results/helicopter'
-data_path: 'data/frames/helicopter'
-mask_path: ['data/masks/helicopter/obj_1_masks','data/masks/helicopter/obj_2_masks']
-latents_path: 'data/frames/helicopter/ddim_latents'
-source_prompt: "Amazing quality, masterpiece, a walking man and a spining helicopter."
-target_prompt: "Amazing quality, masterpiece, a walking robot and a spining helicopter."
+output_path: 'results/couple'
+data_path: 'data/frames/couple'
+mask_path: ['data/masks/couple/obj_1_masks','data/masks/couple/obj_2_masks']
+latents_path: 'data/frames/couple/ddim_latents'
+source_prompt: "Amazing quality, masterpiece, a man and a woman are walking under the sunset."
+target_prompt: "Amazing quality, masterpiece, a tall man and a woman are walking under the sunset."
 negative_prompt: "bad quality, distortions, unrealistic, distorted image, watermark, signature"
 guidance_scale: 10
 
@@ -24,7 +24,7 @@ global_averaging: True
 features_diff_loss_weight: 1
 
 restart_sampling: True
-random_init: False
+random_init: True
 high_freq_replacement_init: True
 downsample_factor: 4
 
@@ -40,7 +40,7 @@ interfere_mask: True
 bbox_mask: False
 resize: True
 w_rescale: [1,1]
-h_rescale: [1.5,1]
+h_rescale: [1.35,1]
 reposition: False
 w_ratio: [0,0] # Negative for left, positive for right
 h_ratio: [0,0] #  Negative for up, positive for down

@@ -40,4 +40,4 @@ interfere_mask: False
 bbox_mask: False
 w_rescale: 1
 h_rescale: 1
-cm_weight: [1]
+cm_weight: [3]

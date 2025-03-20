@@ -30,7 +30,7 @@ class Preprocess(nn.Module):
         self.model_key = "cerspense/zeroscope_v2_576w"
         self.resolution = (576, 320)
 
-        self.pipeline = VideoToVideoSDPipeline.from_pretrained("/root/autodl-tmp/zeroscope_v2_576w", torch_dtype=torch.float16)
+        self.pipeline = VideoToVideoSDPipeline.from_pretrained(self.model_key, torch_dtype=torch.float16)
         self.pipeline = self.pipeline.to("cuda")
         self.pipeline.scheduler = DDIMScheduler.from_config(self.pipeline.scheduler.config)
         self.pipeline.enable_vae_slicing()

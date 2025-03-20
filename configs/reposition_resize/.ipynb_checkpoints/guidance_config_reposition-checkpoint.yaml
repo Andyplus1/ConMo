@@ -1,11 +1,11 @@
 device: 'cuda'
 seed: null
-output_path: 'results/couple'
-data_path: 'data/frames/couple'
-mask_path: ['data/masks/couple/obj_1_masks','data/masks/couple/obj_2_masks']
-latents_path: 'data/frames/couple/ddim_latents'
-source_prompt: "Amazing quality, masterpiece, a man and a woman are walking under the sunset."
-target_prompt: "Amazing quality, masterpiece, a tall man and a woman are walking under the sunset."
+output_path: 'results/van_repos'
+data_path: 'data/frames/van'
+mask_path: ['data/masks/van/obj_1_masks']
+latents_path: 'data/frames/van/ddim_latents'
+source_prompt: "Amazing quality, masterpiece, A van is moving one the road."
+target_prompt: "Amazing quality, masterpiece, A airship is flying in the sky."
 negative_prompt: "bad quality, distortions, unrealistic, distorted image, watermark, signature"
 guidance_scale: 10
 
@@ -24,7 +24,7 @@ global_averaging: True
 features_diff_loss_weight: 1
 
 restart_sampling: True
-random_init: False
+random_init: True
 high_freq_replacement_init: True
 downsample_factor: 4
 
@@ -36,12 +36,11 @@ use_temp_conv_features: True
 up_res_dict: {1: [1]}
 guidance_before_res: True
 
-cm_weight: [0.5,1]
 interfere_mask: True
 bbox_mask: False
-resize: True
-w_rescale: [1,1]
-h_rescale: [1.5,1]
-reposition: False
-w_ratio: [0,0] # Negative for left, positive for right
-h_ratio: [0,0] #  Negative for up, positive for down
+resize: False
+w_rescale: [1,1] # the length is the same as mask
+h_rescale: [1,1]
+reposition: True
+w_ratio: [0] # 负左正右
+h_ratio: [-0.4] # 负上正下

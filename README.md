@@ -45,7 +45,7 @@ pip install -r requirements.txt
 ```
 
 # Download Sample Data
-The sample data is provided in [this link](https://pan.baidu.com/s/1W5Sap5V_Xw_BXnftTDfd5A) (BaiduYun Extraction Code: uyi4 )
+The sample data is provided in [this link](https://pan.baidu.com/s/1Al8fnBoQTGzooL9eRC6_1w) (BaiduYun Extraction Code: kgfa )
 
 # Motion Transfer
 <!-- * Our method is designed for transferring motion across objects and scenes -->
@@ -129,7 +129,7 @@ python run_erase.py --config_path configs/erase_camera/guidance_config_erase.yam
 python preprocess_video_ddim.py --config_path configs/erase_camera/preprocess_config_camera.yaml
 python run_erase.py --config_path configs/erase_camera/guidance_config_camera.yaml
 ```
-
+The list "erased" in the config is 
 Once the method is done, the video will be saved to the ```output_path``` under `result.mp4`.
 
 
