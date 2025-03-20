@@ -108,7 +108,7 @@ python preprocess_video_ddim.py --config_path  configs/common/preprocess_config_
 python run.py --config_path configs/common/guidance_config_drasticshape.yaml
 ```
 
-`mask_path` is a list that includes the paths to the masks of each subject in the video. In `config`, `cm_weight` represents \( W_c \) from the paper, which is also a list and must be of the same length as `mask_path`. The larger its value, the greater the retention of the original motion for the subject corresponding to `mask_path`, and the larger the range of shape changes it can adapt to.
+`mask_path` is a list that includes the paths to the masks of each subject in the video. In `config`, `cm_weight` represents $W_c$ from the paper, which is also a list and must be of the same length as `mask_path`. The larger its value, the greater the retention of the original motion for the subject corresponding to `mask_path`, and the larger the range of shape changes it can adapt to.
 
 
 For motion transfer involving geometric changes (reposition/resize), run the following command:
