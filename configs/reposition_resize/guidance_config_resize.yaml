@@ -1,12 +1,11 @@
 device: 'cuda'
 seed: null
-output_path: 'results_new/walk_dog_origin'
-data_path: 'data/frames/walk_dog'
-mask_path: ['/root/autodl-tmp/rebuttal/DMT-to-MTASAP/data/masks/man_masks','/root/autodl-tmp/rebuttal/DMT-to-MTASAP/data/masks/dog_masks']
-# mask_path: ['/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_1_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_2_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_3_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_5_masks']
-latents_path: 'data/frames/walk_dog/ddim_latents'
-source_prompt: "Amazing quality, masterpiece, A person is walking a dog."
-target_prompt: "Amazing quality, masterpiece, A person is walking a tiger."
+output_path: 'results/helicopter'
+data_path: 'data/frames/helicopter'
+mask_path: ['data/masks/helicopter/obj_1_masks','data/masks/helicopter/obj_2_masks']
+latents_path: 'data/frames/helicopter/ddim_latents'
+source_prompt: "Amazing quality, masterpiece, a walking man and a spining helicopter."
+target_prompt: "Amazing quality, masterpiece, a walking robot and a spining helicopter."
 negative_prompt: "bad quality, distortions, unrealistic, distorted image, watermark, signature"
 guidance_scale: 10
 
@@ -40,8 +39,8 @@ guidance_before_res: True
 interfere_mask: True
 bbox_mask: False
 resize: True
-w_rescale: [1,1.2]
-h_rescale: [1,1.2]
+w_rescale: [1,1]
+h_rescale: [1.5,1]
 reposition: False
-w_ratio: [0,0] # 负左正右
-h_ratio: [0,0] # 负上正下
+w_ratio: [0,0] # Negative for left, positive for right
+h_ratio: [0,0] #  Negative for up, positive for down

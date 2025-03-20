@@ -1,12 +1,11 @@
 device: 'cuda'
 seed: null
-output_path: 'results_granularity/cart_new'
-data_path: 'data/frames/cart'
-mask_path: ["data/masks/go-kart/racer1","data/masks/go-kart/racer2"]
-# mask_path: ['/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_1_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_2_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_3_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_5_masks']
-latents_path: 'data/frames/cart/ddim_latents'
-source_prompt: "Amazing quality, masterpiece, two boys driving carts are racing."
-target_prompt: "Amazing quality, masterpiece, two teddy bears driving carts are racing."
+output_path: 'results/Couple_Runner'
+data_path: 'data/frames/Couple_Runner'
+mask_path: ["data/masks/Couple_Runner/obj_1_masks","data/masks/Couple_Runner/obj_2_masks"]
+latents_path: 'data/frames/Couple_Runner/ddim_latents'
+source_prompt: "Amazing quality, masterpiece, two people are running on the street."
+target_prompt: "Amazing quality, masterpiece, two robots are running on the street."
 negative_prompt: "bad quality, distortions, unrealistic, distorted image, watermark, signature"
 guidance_scale: 10
 

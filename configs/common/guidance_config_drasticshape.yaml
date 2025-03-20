@@ -1,12 +1,11 @@
 device: 'cuda'
 seed: null
-output_path: 'results_granularity/cart_new'
-data_path: 'data/frames/cart'
-mask_path: ["data/masks/go-kart/racer1","data/masks/go-kart/racer2"]
-# mask_path: ['/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_1_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_2_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_3_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_5_masks']
-latents_path: 'data/frames/cart/ddim_latents'
-source_prompt: "Amazing quality, masterpiece, two boys driving carts are racing."
-target_prompt: "Amazing quality, masterpiece, two teddy bears driving carts are racing."
+output_path: 'results/car_turn'
+data_path: 'data/frames/car_turn'
+mask_path: ["data/masks/car_turn"]
+latents_path: 'data/frames/car_turn/ddim_latents'
+source_prompt: "Amazing quality, masterpiece, A car is turning on the road."
+target_prompt: "Amazing quality, masterpiece, A motorbike is turning on the road."
 negative_prompt: "bad quality, distortions, unrealistic, distorted image, watermark, signature"
 guidance_scale: 10
 
@@ -41,4 +40,4 @@ interfere_mask: False
 bbox_mask: False
 w_rescale: 1
 h_rescale: 1
-cm_weight: [0,0]
+cm_weight: [1]

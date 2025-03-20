@@ -1,9 +1,7 @@
 device: 'cuda'
 seed: null
-output_path: 'results_ablation/carturn_random_init_erase_outerspace'
+output_path: 'results/carturn_2_outerspace'
 data_path: 'data/frames/car_turn'
-mask_path: ["/root/autodl-tmp/DMT-to-MTASAP_4ablation/data/masks/car_turn/obj_1_masks"]
-# mask_path: ['/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_1_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_2_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_3_masks','/root/autodl-tmp/DMT-to-MTASAP/data/masks/truck/obj_5_masks']
 latents_path:  'data/frames/car_turn/ddim_latents'
 source_prompt: "Amazing quality, masterpiece, A car is turning on the road."
 target_prompt: "Amazing quality, masterpiece, outer space with stars."
@@ -42,3 +40,4 @@ bbox_mask: False
 w_rescale: 1
 h_rescale: 1
 cm_weight: [1]
+erased: [True]
