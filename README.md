@@ -50,12 +50,12 @@ The sample data is provided in [this link](https://pan.baidu.com/s/1Al8fnBoQTGzo
 # Motion Transfer
 <!-- * Our method is designed for transferring motion across objects and scenes -->
 * Our method is based on [ZeroScope](https://huggingface.co/cerspense/zeroscope_v2_576w) text-to-video model and [DMT](https://github.com/diffusion-motion-transfer/diffusion-motion-transfer) motion transfer method. Therefore, we can edit videos of **24 frames**.
-* In some cases, the combination of the target object and the motion from the input video may be out of the T2V model's distribution, potentially resulting in visual artifacts in the generated video. It might be necessary to try several different seeds for sampling.
+* In some cases, the combination of the target object and the motion from the input video may be out of the T2V model`s distribution, potentially resulting in visual artifacts in the generated video. It might be necessary to try several different seeds for sampling.
 * Method was tested to run on a single NVIDIA A40 48GB, and takes ~32GB of video memory.
  It takes approximately 5 minutes on a single NVIDIA A100 40GB for inference.
 
 # Preprocess
-Following [DMT](https://github.com/diffusion-motion-transfer/), to preprocess a video, update configuration file `configs/preprocess_config.yaml':
+Following [DMT](https://github.com/diffusion-motion-transfer/), to preprocess a video, update configuration file `configs/preprocess_config.yaml`:
 
 Arguments to update:
 * ```video_path``` - the input video frames should be located in this path
@@ -91,7 +91,7 @@ Optional arguments to update:
 ```
 python run.py --config_path configs/guidance_config.yaml
 ``` -->
-We provide editing example for the application we mentioned in the paper(preprocess steps are also included here)
+We provide editing example for the application we mentioned in the paper(preprocess steps are also included)
 
 For motion transfer involving no geometric changes (single entity/multiple entities), run the following command:
 ```
@@ -108,6 +108,9 @@ python preprocess_video_ddim.py --config_path  configs/common/preprocess_config_
 python run.py --config_path configs/common/guidance_config_drasticshape.yaml
 ```
 
+`mask_path` is a list that includes the paths to the masks of each subject in the video. In `config`, `cm_weight` represents \( W_c \) from the paper, which is also a list and must be of the same length as `mask_path`. The larger its value, the greater the retention of the original motion for the subject corresponding to `mask_path`, and the larger the range of shape changes it can adapt to.
+
+
 For motion transfer involving geometric changes (reposition/resize), run the following command:
 ```
 #  For reposition
@@ -119,6 +122,8 @@ python preprocess_video_ddim.py --config_path configs/reposition_resize/preproce
 python run_resizeorreposition.py --config_path configs/reposition_resize/guidance_config_resize.yaml
 ```
 
+If the variables `resize` and `reposition` in the config variable are set to `true`, it means that the corresponding operations should be carried out. The variables `w_rescale` and `h_rescale` are lists that match the length of `mask_path`, indicating the scaling ratios horizontally and vertically for each subject; `w_ratio` and `h_ratio` belong to the range (0, 1), representing the relative horizontal and vertical movement distances with respect to the entire image.
+
 For selective transferring motions from the original video / transferring only the camera motion, run the following command:
 ```
 #  For selective transferring 
@@ -129,7 +134,9 @@ python run_erase.py --config_path configs/erase_camera/guidance_config_erase.yam
 python preprocess_video_ddim.py --config_path configs/erase_camera/preprocess_config_camera.yaml
 python run_erase.py --config_path configs/erase_camera/guidance_config_camera.yaml
 ```
-The list "erased" in the config is 
+
+The `erased` list in the config must match the length of the `mask_path` list. Objects associated with True values in the `mask_path` will be erased. If all entries in `erased` are True, only the camera motion will be transferred.
+
 Once the method is done, the video will be saved to the ```output_path``` under `result.mp4`.
 
 

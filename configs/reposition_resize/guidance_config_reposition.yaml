@@ -42,5 +42,5 @@ resize: False
 w_rescale: [1,1] # the length is the same as mask
 h_rescale: [1,1]
 reposition: True
-w_ratio: [0] # 负左正右
-h_ratio: [-0.4] # 负上正下
+w_ratio: [0] # Negative for left, positive for right
+h_ratio: [-0.4] #  Negative for up, positive for down

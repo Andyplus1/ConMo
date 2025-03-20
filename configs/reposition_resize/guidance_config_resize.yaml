@@ -42,5 +42,5 @@ resize: True
 w_rescale: [1,1]
 h_rescale: [1.35,1]
 reposition: False
-w_ratio: [0,0] # Negative for left, positive for right
-h_ratio: [0,0] #  Negative for up, positive for down
+w_ratio: [0,0] 
+h_ratio: [0,0] 
