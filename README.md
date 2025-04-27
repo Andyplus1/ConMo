@@ -1,8 +1,11 @@
-# ConMo: Controllable Motion Disentanglement and Recomposition for Zero-Shot Motion Transfer
+# ConMo: Controllable Motion Disentanglement and Recomposition for Zero-Shot Motion Transfer （CVPR 2025）
 <!-- <a href="https://diffusion-motion-transfer.github.io/"><img src="https://img.shields.io/static/v1?label=Project&message=Website&color=blue"></a>
 <a href="https://arxiv.org/abs/"><img src="https://img.shields.io/badge/arXiv-2311.17009-b31b1b.svg"></a> -->
 
 This is the official implementation of the paper:
+["ConMo: Controllable Motion Disentanglement and Recomposition for Zero-Shot Motion Transfer"](https://arxiv.org/pdf/2504.02451)
+
+
 
 By Jiayi Gao, Zijin Yin, Changcheng Hua, Yuxin Peng, Kongming Liang, Zhanyu Ma, Jun Guo and Yang Liu
 
@@ -156,12 +159,12 @@ python motion_fidelity_score.py --config_path configs/motion_fidelity_config.yam
 
 
 
-<!-- # Citation
+# Citation
 ```
-@article{yatim2023spacetime,
-        title = {Space-Time Diffusion Features for Zero-Shot Text-Driven Motion Transfer},
-        author = {Yatim, Danah and Fridman, Rafail and Bar-Tal, Omer and Kasten, Yoni and Dekel, Tali},
-        journal={arXiv preprint arxiv:2311.17009},
-        year={2023}
-        }
-``` -->
+@article{gao2025conmo,
+  title={ConMo: Controllable Motion Disentanglement and Recomposition for Zero-Shot Motion Transfer},
+  author={Gao, Jiayi and Yin, Zijin and Hua, Changcheng and Peng, Yuxin and Liang, Kongming and Ma, Zhanyu and Guo, Jun and Liu, Yang},
+  journal={arXiv preprint arXiv:2504.02451},
+  year={2025}
+}
+``` 
