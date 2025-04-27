@@ -6,7 +6,7 @@ This is the official implementation of the paper:
 "ConMo: Controllable Motion Disentanglement and Recomposition for Zero-Shot Motion Transfer" 
 （Accepted to CVPR 2025）
 
-[Paper on arXiv](https://arxiv.org/pdf/2504.02451) | [Project Page](https://andyplus1.github.io/ConMo_Page/)
+[![arXiv](https://img.shields.io/badge/arXiv-2403.01231-b31b1b.svg)](https://arxiv.org/pdf/2504.02451)     [![Project Page](https://img.shields.io/badge/Project-Page-blue.svg)](https://andyplus1.github.io/ConMo_Page/)
 
 By Jiayi Gao, Zijin Yin, Changcheng Hua, Yuxin Peng, Kongming Liang, Zhanyu Ma, Jun Guo and Yang Liu
 
